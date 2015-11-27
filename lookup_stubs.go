@@ -17,7 +17,7 @@ func init() {
 	implemented = false
 }
 
-func current() (*group, error) {
+func current() (*Group, error) {
 	return nil, fmt.Errorf("group: Current not implemented on %s/%s", runtime.GOOS, runtime.GOARCH)
 }
 
@@ -25,6 +25,6 @@ func lookup(groupname string) (*Group, error) {
 	return nil, fmt.Errorf("group: Lookup not implemented on %s/%s", runtime.GOOS, runtime.GOARCH)
 }
 
-func lookupId(string) (*group, error) {
+func lookupId(string) (*Group, error) {
 	return nil, fmt.Errorf("group: LookupId not implemented on %s/%s", runtime.GOOS, runtime.GOARCH)
 }
