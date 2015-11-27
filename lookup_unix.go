@@ -21,6 +21,17 @@ import (
 #include <sys/types.h>
 #include <grp.h>
 #include <stdlib.h>
+
+static int mygetgrnam_r(const char *name, struct group *grp,
+          char *buf, size_t buflen, struct group **result) {
+ return getgrnam_r(name, grp, buf, buflen, result);
+}
+
+static int mygetgrgid_r(int gid, struct group *grp,
+	char *buf, size_t buflen, struct group **result) {
+ return getgrgid_r(gid, grp, buf, buflen, result);
+}
+
 */
 import "C"
 
@@ -59,7 +70,7 @@ func lookupUnix(gid int, groupname string, lookupByName bool) (*Group, error) {
 	if lookupByName {
 		nameC := C.CString(groupname)
 		defer C.free(unsafe.Pointer(nameC))
-		rv = C.getgrnam_r(nameC,
+		rv = C.mygetgrnam_r(nameC,
 			&grp,
 			(*C.char)(buf),
 			C.size_t(bufSize),
@@ -71,7 +82,7 @@ func lookupUnix(gid int, groupname string, lookupByName bool) (*Group, error) {
 			return nil, UnknownGroupError(groupname)
 		}
 	} else {
-		rv = C.getgrgid_r(C.__gid_t(gid),
+		rv = C.mygetgrgid_r(C.int(gid),
 			&grp,
 			(*C.char)(buf),
 			C.size_t(bufSize),
